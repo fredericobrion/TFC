@@ -53,7 +53,7 @@ describe('Teams test', () => {
   it('should return a team by id', async function() {
     sinon.stub(TeamModelSequelize, 'findByPk').resolves(team1 as any);
 
-    const { status, body } = await chai.request(app.get('/teams/1'));
+    const { status, body } = await chai.request(app).get('/teams/1');
 
     expect(status).to.equal(200);
     expect(body).to.deep.equal(team1);
