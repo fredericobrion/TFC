@@ -1,9 +1,13 @@
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 import JWT from '../../utils/JWT';
 
 const validEmail = 'valid@email.com';
+const invalidEmail = 'invalidEmail';
+const incorrectEmail = 'incorrect@email.com';
 const validPassword = 'validPassword';
-const encryptedPassword = bcrypt.hashSync(validPassword, 10); 
+const incorrectPassword = 'incorrectPassword';
+const invalidPssword = '12345';
+const encryptedPassword = bcrypt.hashSync(validPassword, 10);
 
 const validLogin = {
   email: validEmail,
@@ -20,11 +24,42 @@ const loginBodyWithoutPassword = {
   pasword: validPassword,
 };
 
+const loginBodyWithInvalidEmail = {
+  email: invalidEmail,
+  password: validPassword,
+};
+
+const loginBodyWithInvalidPassword = {
+  email: validEmail,
+  password: invalidPssword,
+};
+
+const loginBodyWithIncorrectEmail = {
+  email: incorrectEmail,
+  password: validPassword,
+};
+
+const loginBodyWithIncorrectPassword = {
+  email: validEmail,
+  password: incorrectPassword,
+};
+
 const userFromDb = {
-	email: validEmail,
-	password: encryptedPassword,
-}
+  email: validEmail,
+  password: encryptedPassword,
+  role: 'admin',
+};
 
-const token = JWT.sign({ email: validEmail });
+const token = JWT.sign({ role: 'admin' });
 
-export { validLogin, loginBodyWithoutEmail, loginBodyWithoutPassword, userFromDb, token };
+export {
+  validLogin,
+  loginBodyWithoutEmail,
+  loginBodyWithoutPassword,
+  userFromDb,
+  token,
+  loginBodyWithInvalidEmail,
+  loginBodyWithInvalidPassword,
+  loginBodyWithIncorrectEmail,
+  loginBodyWithIncorrectPassword,
+};
