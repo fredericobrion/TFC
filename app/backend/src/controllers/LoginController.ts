@@ -23,4 +23,14 @@ export default class LoginController {
 
     return res.status(mapStatusHTTP(status)).json(data);
   }
+
+  getRole = (_req: Request, res: Response) => {
+    const { role } = res.locals.role;
+
+    if (!role) {
+      return res.status(401).json({ message: 'Token must be a valid token' });
+    }
+
+    return res.status(200).json({ role });
+  };
 }
