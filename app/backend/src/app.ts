@@ -3,6 +3,8 @@ import 'express-async-errors';
 
 import errorMiddleware from './middlewares/errorMiddleware';
 
+import router from './routes';
+
 class App {
   public app: express.Express;
 
@@ -13,6 +15,8 @@ class App {
 
     // Não remover essa rota!
     this.app.get('/', (req, res) => res.json({ ok: true }));
+
+    this.routes();
 
     // Não remova esse middleware de erro, mas fique a vontade para customizá-lo
     // Mantenha ele sempre como o último middleware a ser chamado
@@ -33,6 +37,10 @@ class App {
 
   public start(PORT: string | number): void {
     this.app.listen(PORT, () => console.log(`Running on port ${PORT}`));
+  }
+
+  private routes(): void {
+    this.app.use(router);
   }
 }
 
