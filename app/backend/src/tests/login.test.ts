@@ -7,6 +7,7 @@ import { app } from '../app';
 
 import UserModelSequelize from '../database/models/UserModelSequelize';
 import {
+  invalidToken,
   loginBodyWithIncorrectEmail,
   loginBodyWithIncorrectPassword,
   loginBodyWithInvalidEmail,
@@ -108,6 +109,26 @@ describe('Login test', () => {
 
     expect(status).to.equal(401);
     expect(body).to.deep.equal({ message: 'Token not found' });
+  });
+
+  it('should not be able to return  a user object with a invalid token', async function() {
+    const { status, body } = await chai
+      .request(app)
+      .get('/login/role')
+      .set({ "Authorization": `Bearer ${invalidToken}` });
+
+    expect(status).to.equal(401);
+    expect(body).to.deep.equal({ message: 'Token must be a valid token' });
+  });
+
+  it('should be able to return  a user object with a valid token', async function() {
+    const { status, body } = await chai
+      .request(app)
+      .get('/login/role')
+      .set({ "Authorization": `Bearer ${token}` });
+
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal({ role: 'admin' });
   });
 
   afterEach(sinon.restore);

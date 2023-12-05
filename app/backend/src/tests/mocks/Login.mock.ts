@@ -52,6 +52,8 @@ const userFromDb = {
 
 const token = JWT.sign({ role: 'admin' });
 
+const invalidToken = 'invalido';
+
 export {
   validLogin,
   loginBodyWithoutEmail,
@@ -62,4 +64,5 @@ export {
   loginBodyWithInvalidPassword,
   loginBodyWithIncorrectEmail,
   loginBodyWithIncorrectPassword,
+  invalidToken,
 };
