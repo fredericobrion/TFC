@@ -8,7 +8,7 @@ import Example from '../database/models/ExampleModel';
 import TeamModelSequelize from '../database/models/TeamModelSequelize';
 
 import { Response } from 'superagent';
-import { teams } from './mocks/Teams.mock';
+import { team1, teams } from './mocks/Teams.mock';
 
 chai.use(chaiHttp);
 
@@ -49,4 +49,15 @@ describe('Teams test', () => {
     expect(status).to.equal(200);
     expect(body).to.deep.equal(teams);
   });
+
+  it('should return a team by id', async function() {
+    sinon.stub(TeamModelSequelize, 'findByPk').resolves(team1 as any);
+
+    const { status, body } = await chai.request(app.get('/teams/1'));
+
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal(team1);
+  });
+
+  afterEach(sinon.restore);
 });
