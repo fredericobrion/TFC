@@ -68,4 +68,29 @@ const invalidToken = 'invalido';
 
 const matches = [...inProgressMatches, ...finishedMatches];
 
-export { matches, inProgressMatches, finishedMatches, token, invalidToken };
+const homeTeamId = 1;
+const awayTeamId = 2;
+const homeTeamGoals = 2;
+const awayTeamGoals = 0;
+
+const createdMatch = {
+  id: 5,
+  homeTeamId,
+  homeTeamGoals,
+  awayTeamId,
+  awayTeamGoals,
+  inProgress: true
+}
+
+export {
+  matches,
+  inProgressMatches,
+  finishedMatches,
+  token,
+  invalidToken,
+  homeTeamId,
+  awayTeamId,
+  homeTeamGoals,
+  awayTeamGoals,
+  createdMatch,
+};

@@ -1,6 +1,7 @@
 import MatchModelSequelize from '../database/models/MatchModelSequelize';
 import IMatchWithTeams from '../Interfaces/matches/IMatchWithTeams';
 import TeamModelSequelize from '../database/models/TeamModelSequelize';
+import { IMatch } from '../Interfaces/matches/IMatch';
 
 export default class MatchModel {
   private model = MatchModelSequelize;
@@ -58,5 +59,22 @@ export default class MatchModel {
     matchToUpdate.homeTeamGoals = homeTeamGoals;
     matchToUpdate.awayTeamGoals = awayTeamGoals;
     await matchToUpdate.save();
+  }
+
+  async create(
+    homeTeamId: number,
+    awayTeamId: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<IMatch> {
+    const match = await this.model.create({
+      homeTeamId,
+      awayTeamId,
+      homeTeamGoals,
+      awayTeamGoals,
+      inProgress: true,
+    });
+
+    return match;
   }
 }

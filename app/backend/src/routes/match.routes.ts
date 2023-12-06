@@ -28,4 +28,10 @@ router.patch(
   (req: Request, res: Response) => matchController.updateInProgressScore(req, res),
 );
 
+router.post(
+  '/',
+  validateToken,
+  (req: Request, res: Response) => matchController.createMatch(req, res),
+);
+
 export default router;

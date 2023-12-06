@@ -1,6 +1,7 @@
 import MatchModel from '../models/MatchModel';
 import { ServiceResponse } from '../Interfaces/ServiceResponse';
 import { IMatch } from '../Interfaces/matches/IMatch';
+import TeamModelSequelize from '../database/models/TeamModelSequelize';
 
 export default class MatchService {
   constructor(private matchModel: MatchModel = new MatchModel()) {}
@@ -48,5 +49,30 @@ export default class MatchService {
     }
 
     return { status: 'SUCCESSFUL', data: { message: 'Updated' } };
+  }
+
+  async createMatch(
+    homeTeamId: number,
+    awayTeamId: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<ServiceResponse<IMatch>> {
+    const teams = await TeamModelSequelize.findAll();
+
+    const homeTeam = teams.find((team) => team.id === homeTeamId);
+    const awayTeam = teams.find((team) => team.id === awayTeamId);
+
+    if (!homeTeam || !awayTeam) {
+      return { status: 'NOT_FOUND', data: { message: 'awayTeamId must be a valid team' } };
+    }
+
+    const match = await this.matchModel.create(
+      homeTeamId,
+      awayTeamId,
+      homeTeamGoals,
+      awayTeamGoals,
+    );
+
+    return { status: 'SUCCESSFUL', data: match };
   }
 }
