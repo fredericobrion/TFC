@@ -3,6 +3,8 @@ import { ServiceResponse } from '../Interfaces/ServiceResponse';
 import { IMatch } from '../Interfaces/matches/IMatch';
 import TeamModelSequelize from '../database/models/TeamModelSequelize';
 
+const ERROR_MSG_404 = 'There is no team with such id!';
+
 export default class MatchService {
   constructor(private matchModel: MatchModel = new MatchModel()) {}
 
@@ -61,9 +63,8 @@ export default class MatchService {
 
     const homeTeam = teams.find((team) => team.id === homeTeamId);
     const awayTeam = teams.find((team) => team.id === awayTeamId);
-
     if (!homeTeam || !awayTeam) {
-      return { status: 'NOT_FOUND', data: { message: 'awayTeamId must be a valid team' } };
+      return { status: 'NOT_FOUND', data: { message: ERROR_MSG_404 } };
     }
 
     const match = await this.matchModel.create(
@@ -73,6 +74,6 @@ export default class MatchService {
       awayTeamGoals,
     );
 
-    return { status: 'SUCCESSFUL', data: match };
+    return { status: 'CREATED', data: match };
   }
 }

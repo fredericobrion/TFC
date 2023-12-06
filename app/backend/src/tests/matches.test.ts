@@ -212,7 +212,7 @@ describe('Matches test', () => {
         .send({ awayTeamId, homeTeamGoals, awayTeamGoals });
   
       expect(status).to.equal(400);
-      expect(body).to.deep.equal({ message: "\"homeTeamId\" is required" });
+      expect(body).to.deep.equal({ message: "\"homeTeamId\" must be a number" });
     });
 
     it('should not be able to create a match without homeTeamId being a number', async function () {
@@ -220,7 +220,7 @@ describe('Matches test', () => {
         .request(app)
         .post('/matches')
         .set('Authorization', `Bearer ${token}`)
-        .send({ homeTeamId: homeTeamId.toString(), awayTeamId, homeTeamGoals, awayTeamGoals });
+        .send({ homeTeamId: 'a', awayTeamId, homeTeamGoals, awayTeamGoals });
   
       expect(status).to.equal(400);
       expect(body).to.deep.equal({ message: "\"homeTeamId\" must be a number" });
@@ -234,7 +234,7 @@ describe('Matches test', () => {
         .send({ homeTeamId, homeTeamGoals, awayTeamGoals });
   
       expect(status).to.equal(400);
-      expect(body).to.deep.equal({ message: "\"awayTeamId\" is required" });
+      expect(body).to.deep.equal({ message: "\"awayTeamId\" must be a number" });
     });
 
     it('should not be able to create a match without awayTeamId being a number', async function () {
@@ -242,7 +242,7 @@ describe('Matches test', () => {
         .request(app)
         .post('/matches')
         .set('Authorization', `Bearer ${token}`)
-        .send({ homeTeamId, awayTeamId: awayTeamId.toString(), homeTeamGoals, awayTeamGoals });
+        .send({ homeTeamId, awayTeamId: 'a', homeTeamGoals, awayTeamGoals });
   
       expect(status).to.equal(400);
       expect(body).to.deep.equal({ message: "\"awayTeamId\" must be a number" });
@@ -256,7 +256,7 @@ describe('Matches test', () => {
         .send({ awayTeamId, homeTeamId, awayTeamGoals });
   
       expect(status).to.equal(400);
-      expect(body).to.deep.equal({ message: "\"homeTeamGoals\" is required" });
+      expect(body).to.deep.equal({ message: "\"homeTeamGoals\" must be a number" });
     });
 
     it('should not be able to create a match without homeTeamGoals being a number', async function () {
@@ -264,7 +264,7 @@ describe('Matches test', () => {
         .request(app)
         .post('/matches')
         .set('Authorization', `Bearer ${token}`)
-        .send({ homeTeamId, awayTeamId, homeTeamGoals: homeTeamGoals.toString(), awayTeamGoals });
+        .send({ homeTeamId, awayTeamId, homeTeamGoals: 'a', awayTeamGoals });
   
       expect(status).to.equal(400);
       expect(body).to.deep.equal({ message: "\"homeTeamGoals\" must be a number" });
@@ -278,7 +278,7 @@ describe('Matches test', () => {
         .send({ awayTeamId, homeTeamGoals, homeTeamId });
   
       expect(status).to.equal(400);
-      expect(body).to.deep.equal({ message: "\"awayTeamGoals\" is required" });
+      expect(body).to.deep.equal({ message: "\"awayTeamGoals\" must be a number" });
     });
 
     it('should not be able to create a match without awayTeamGoals being a number', async function () {
@@ -286,7 +286,7 @@ describe('Matches test', () => {
         .request(app)
         .post('/matches')
         .set('Authorization', `Bearer ${token}`)
-        .send({ homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals: awayTeamGoals.toString() });
+        .send({ homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals: 'a' });
   
       expect(status).to.equal(400);
       expect(body).to.deep.equal({ message: "\"awayTeamGoals\" must be a number" });
@@ -299,8 +299,8 @@ describe('Matches test', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({ homeTeamId: awayTeamId, awayTeamId, homeTeamGoals, awayTeamGoals });
   
-      expect(status).to.equal(400);
-      expect(body).to.deep.equal({ message: "homeTeamId must be different from awayTeamId" });
+      expect(status).to.equal(422);
+      expect(body).to.deep.equal({ message: "It is not possible to create a match with two equal teams" });
     });
 
     it('should not be able to create a match when homeTeamId does not exist', async function () {
@@ -312,7 +312,7 @@ describe('Matches test', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({ homeTeamId: 100, awayTeamId, homeTeamGoals, awayTeamGoals });
 
-      expect(status).to.equal(400);
+      expect(status).to.equal(404);
       expect(body).to.deep.equal({ message: "There is no team with such id!" });
     });
 
@@ -325,7 +325,7 @@ describe('Matches test', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({ homeTeamId, awayTeamId: 100, homeTeamGoals, awayTeamGoals });
 
-      expect(status).to.equal(400);
+      expect(status).to.equal(404);
       expect(body).to.deep.equal({ message: "There is no team with such id!" });
     });
 
@@ -337,7 +337,7 @@ describe('Matches test', () => {
         .send({ homeTeamId, awayTeamId, homeTeamGoals: -1, awayTeamGoals });
   
       expect(status).to.equal(400);
-      expect(body).to.deep.equal({ message: "homeTeamGoals can't be less than 0" });
+      expect(body).to.deep.equal({ message: "The \"homeTeamGoals\" cannot be less than zero" });
     });
 
     it('should not be able to create a match when awayTeamGoals is less than 0', async function () {
@@ -348,7 +348,7 @@ describe('Matches test', () => {
         .send({ homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals: -1 });
   
       expect(status).to.equal(400);
-      expect(body).to.deep.equal({ message: "awayTeamGoals can't be less than 0" });
+      expect(body).to.deep.equal({ message: "The \"awayTeamGoals\" cannot be less than zero" });
     });
 
     it('should be able to create a match', async function () {
