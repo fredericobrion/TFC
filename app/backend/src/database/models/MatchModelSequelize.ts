@@ -5,6 +5,7 @@ import {
   InferCreationAttributes,
   CreationOptional,
 } from 'sequelize';
+import TeamModelSequelize from './TeamModelSequelize';
 import db from '.';
 
 class MatchModelSequelize extends Model<
@@ -23,19 +24,6 @@ InferCreationAttributes<MatchModelSequelize>
 
   declare inProgress: boolean;
 }
-
-MatchModelSequelize.belongsToMany(db.models.teams, {
-  as: 'homeTeam',
-  through: db.models.teams,
-  foreignKey: 'id',
-  otherKey: 'homeTeamId',
-});
-MatchModelSequelize.belongsToMany(db.models.teams, {
-  as: 'awayTeam',
-  through: db.models.teams,
-  foreignKey: 'id',
-  otherKey: 'awayTeamId',
-});
 
 MatchModelSequelize.init(
   {
@@ -73,5 +61,20 @@ MatchModelSequelize.init(
     underscored: true,
   },
 );
+
+// MatchModelSequelize.belongsTo(db.models.teams, {
+//   as: 'homeTeam',
+//   foreignKey: 'id',
+// });
+// MatchModelSequelize.belongsTo(db.models.teams, {
+//   as: 'awayTeam',
+//   foreignKey: 'id',
+// });
+
+MatchModelSequelize.hasMany(TeamModelSequelize, { foreignKey: 'id', as: 'homeTeam' });
+MatchModelSequelize.hasMany(TeamModelSequelize, { foreignKey: 'id', as: 'awayTeam' });
+
+TeamModelSequelize.belongsTo(MatchModelSequelize, { foreignKey: 'id', as: 'homeTeam' });
+TeamModelSequelize.belongsTo(MatchModelSequelize, { foreignKey: 'id', as: 'awayTeam' });
 
 export default MatchModelSequelize;

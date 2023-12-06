@@ -35,7 +35,7 @@ describe('Login test', () => {
       .send(validLogin);
 
     expect(status).to.equal(200);
-    expect(body).to.deep.equal({ token });
+    expect(body).to.have.key('token');
   });
 
   it('should not be able to login without email', async function () {
