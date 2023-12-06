@@ -15,6 +15,12 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
   try {
     const decoded = JWT.verify(token);
 
+    if (decoded === 'Token must be a valid token') {
+      throw new Error(decoded);
+    }
+
+    console.log(decoded);
+
     res.locals.role = decoded;
 
     next();

@@ -1,9 +1,8 @@
 import MatchModelSequelize from '../database/models/MatchModelSequelize';
-import { IMatchModel } from '../Interfaces/matches/IMatchModel';
 import IMatchWithTeams from '../Interfaces/matches/IMatchWithTeams';
 import TeamModelSequelize from '../database/models/TeamModelSequelize';
 
-export default class MatchModel implements IMatchModel {
+export default class MatchModel {
   private model = MatchModelSequelize;
 
   async findAll(): Promise<IMatchWithTeams[]> {
@@ -26,5 +25,19 @@ export default class MatchModel implements IMatchModel {
     }));
 
     return matches;
+  }
+
+  async finish(id: number): Promise<void | string> {
+    const matchToUpdate = await this.model.findByPk(id);
+
+    if (!matchToUpdate) {
+      return 'not found';
+    }
+    if (!matchToUpdate.inProgress) {
+      return 'finished';
+    }
+
+    matchToUpdate.inProgress = false;
+    await matchToUpdate.save();
   }
 }

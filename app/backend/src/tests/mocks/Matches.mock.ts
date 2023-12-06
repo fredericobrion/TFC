@@ -1,6 +1,8 @@
+import JWT from '../../utils/JWT';
+
 const inProgressMatches = [
   {
-    id: 41,
+    id: 1,
     homeTeamId: 16,
     homeTeamGoals: 2,
     awayTeamId: 9,
@@ -14,7 +16,7 @@ const inProgressMatches = [
     },
   },
   {
-    id: 42,
+    id: 2,
     homeTeamId: 6,
     homeTeamGoals: 1,
     awayTeamId: 1,
@@ -31,7 +33,7 @@ const inProgressMatches = [
 
 const finishedMatches = [
   {
-    id: 50,
+    id: 3,
     homeTeamId: 16,
     homeTeamGoals: 2,
     awayTeamId: 9,
@@ -45,7 +47,7 @@ const finishedMatches = [
     },
   },
   {
-    id: 51,
+    id: 4,
     homeTeamId: 6,
     homeTeamGoals: 1,
     awayTeamId: 1,
@@ -60,9 +62,10 @@ const finishedMatches = [
   },
 ];
 
-const matches = [
-  ...inProgressMatches,
-  ...finishedMatches,
-];
+const token = JWT.sign({ role: 'admin' });
 
-export { matches, inProgressMatches, finishedMatches };
+const invalidToken = 'invalido';
+
+const matches = [...inProgressMatches, ...finishedMatches];
+
+export { matches, inProgressMatches, finishedMatches, token, invalidToken };
