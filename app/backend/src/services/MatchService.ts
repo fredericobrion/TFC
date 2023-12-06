@@ -28,4 +28,25 @@ export default class MatchService {
 
     return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
   }
+
+  async updateInProgressScore(
+    id: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<ServiceResponse<IMatch | { message: string }>> {
+    const matchToUpdate = await this.matchModel.updateInProgressScore(
+      id,
+      homeTeamGoals,
+      awayTeamGoals,
+    );
+
+    if (matchToUpdate === 'not found') {
+      return { status: 'NOT_FOUND', data: { message: 'Match not found' } };
+    }
+    if (matchToUpdate === 'finished') {
+      return { status: 'INVALID_DATA', data: { message: 'Match is already finished' } };
+    }
+
+    return { status: 'SUCCESSFUL', data: { message: 'Updated' } };
+  }
 }

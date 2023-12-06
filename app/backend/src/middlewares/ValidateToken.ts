@@ -19,8 +19,6 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
       throw new Error(decoded);
     }
 
-    console.log(decoded);
-
     res.locals.role = decoded;
 
     next();

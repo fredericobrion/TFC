@@ -40,4 +40,23 @@ export default class MatchModel {
     matchToUpdate.inProgress = false;
     await matchToUpdate.save();
   }
+
+  async updateInProgressScore(
+    id: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<void | string> {
+    const matchToUpdate = await this.model.findByPk(id);
+
+    if (!matchToUpdate) {
+      return 'not found';
+    }
+    if (!matchToUpdate.inProgress) {
+      return 'finished';
+    }
+
+    matchToUpdate.homeTeamGoals = homeTeamGoals;
+    matchToUpdate.awayTeamGoals = awayTeamGoals;
+    await matchToUpdate.save();
+  }
 }

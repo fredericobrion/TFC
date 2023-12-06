@@ -84,47 +84,90 @@ describe('Matches test', () => {
     expect(body).to.deep.equal({ message: 'Finished' });
   });
 
-  // it('should not be able to update a match without a valid token', async function(){
-  //   sinon.stub(MatchModelSequelize, 'findByPk').resolves(matches[0] as any);
+  it('should not be able to update a match without a valid token', async function(){
+    sinon.stub(MatchModelSequelize, 'findByPk').resolves(matches[0] as any);
     
-  //   const { status, body } = await chai
-  //     .request(app)
-  //     .patch('/matches/1')
-  //     .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
-  // });
+    const { status, body } = await chai
+      .request(app)
+      .patch('/matches/1')
+      .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
 
-  // it('should be able to update a match', async function () {
-  //   sinon.stub(MatchModelSequelize, 'findByPk').resolves(matches[0] as any);
+    expect(status).to.equal(401);
+    expect(body).to.deep.equal({ message: 'Token not found' });
+  });
 
-  //   const { status, body } = await chai
-  //     .request(app)
-  //     .patch('/matches/1')
-  //     .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
+  it('should not be able to update a match with an invalid token', async function () {
+    sinon.stub(MatchModelSequelize, 'findByPk').resolves(matches[0] as any);
 
-  //   expect (status).to.equal(200);
-  // });
+    const { status, body } = await chai
+      .request(app)
+      .patch('/matches/1')
+      .set('Authorization', `Bearer ${invalidToken}`);
 
-  // it('should not be able to update a match that does not exist', async function () {
-  //   sinon.stub(MatchModelSequelize, 'findByPk').resolves(null);
+    expect(status).to.equal(401);
+    expect(body).to.deep.equal({ message: 'Token must be a valid token' });
+  });
 
-  //   const { status, body } = await chai
-  //     .request(app)
-  //     .patch('/matches/11658')
-  //     .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
+  it('should not be able to update a match without homeTeamGoals', async function () {
+    const { status, body } = await chai
+      .request(app)
+      .patch('/matches/1')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ awayTeamGoals: 1 });
 
-  //   expect (status).to.equal(404);
-  // });
+    expect(status).to.equal(400);
+    expect(body).to.deep.equal({ message: "\"homeTeamGoals\" is required" });
+  });
 
-  // it('should not be able to update a match that is not in progress', async function () {
-  //   sinon.stub(MatchModelSequelize, 'findByPk').resolves(matches[2] as any);
+  it('should not be able to update a match without awayTeamGoals', async function () {
+    const { status, body } = await chai
+      .request(app)
+      .patch('/matches/1')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ homeTeamGoals: 1 });
 
-  //   const { status, body } = await chai
-  //     .request(app)
-  //     .patch('/matches/3')
-  //     .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
+    expect(status).to.equal(400);
+    expect(body).to.deep.equal({ message: "\"awayTeamGoals\" is required" });
+  });
 
-  //   expect (status).to.equal(400);
-  // });
+  it('should not be able to update a match that does not exist', async function () {
+    sinon.stub(MatchModelSequelize, 'findByPk').resolves(null);
+
+    const { status, body } = await chai
+      .request(app)
+      .patch('/matches/11658')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
+
+    expect(status).to.equal(404);
+    expect(body).to.deep.equal({ message: 'Match not found' });
+  });
+
+  it('should not be able to update a match that is not in progress', async function () {
+    sinon.stub(MatchModelSequelize, 'findByPk').resolves(matches[2] as any);
+
+    const { status, body } = await chai
+      .request(app)
+      .patch('/matches/3')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
+
+    expect(status).to.equal(401);
+    expect(body).to.deep.equal({ message: 'Match is already finished' });
+  });
+
+  it.skip('should be able to update a match', async function () {
+    sinon.stub(MatchModelSequelize, 'findByPk').resolves(matches[0] as any);
+
+    const { status, body } = await chai
+      .request(app)
+      .patch('/matches/1')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
+
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal({ message: 'Updated' });
+  });
 
   afterEach(sinon.restore);
 });
