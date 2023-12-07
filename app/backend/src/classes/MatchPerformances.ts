@@ -56,4 +56,20 @@ export default class MatchPerformances {
 
     return victories * 3 + draws;
   }
+
+  calculateGoalsBalance(home: boolean): number {
+    const goalsFavor = this.calculateGoalsFavor(home);
+    const goalsOwn = this.calculateGoalsOwn(home);
+
+    return goalsFavor - goalsOwn;
+  }
+
+  calculateEfficiency(home: boolean): string {
+    const points = this.calculatePoints(home);
+    const games = this.matches.length;
+
+    const efficiency = Number(((points * 100) / (games * 3)).toFixed(2));
+
+    return efficiency.toString();
+  }
 }

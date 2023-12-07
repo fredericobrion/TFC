@@ -4,6 +4,7 @@ import { ITeam } from '../Interfaces/teams/ITeam';
 import { IMatch } from '../Interfaces/matches/IMatch';
 import ILeaderboard from '../Interfaces/leaderboard/ILeaderboard';
 import MatchPerformances from './MatchPerformances';
+import orderLeaderboard from '../utils/orderLeaderBoard';
 
 export default class Leaderboard {
   private teams: ITeam[] = [];
@@ -38,8 +39,10 @@ export default class Leaderboard {
         totalLosses: matchPerformances.calculateLosses(home),
         goalsFavor: matchPerformances.calculateGoalsFavor(home),
         goalsOwn: matchPerformances.calculateGoalsOwn(home),
+        goalsBalance: matchPerformances.calculateGoalsBalance(home),
+        efficiency: matchPerformances.calculateEfficiency(home),
       };
     });
-    return leaderboard;
+    return orderLeaderboard(leaderboard);
   }
 }
