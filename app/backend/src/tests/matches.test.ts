@@ -170,15 +170,31 @@ describe('Matches test', () => {
       expect(body).to.deep.equal({ message: 'Match is already finished' });
     });
   
-    it.skip('should be able to update a match', async function () {
-      sinon.stub(MatchModelSequelize, 'findByPk').resolves(matches[0] as any);
+    // it('should be able to update a match', async function () {
+    //   sinon.stub(MatchModelSequelize, 'findByPk').resolves(matches[0] as any);
   
+    //   const { status, body } = await chai
+    //     .request(app)
+    //     .patch('/matches/1')
+    //     .set('Authorization', `Bearer ${token}`)
+    //     .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
+  
+    //   expect(status).to.equal(200);
+    //   expect(body).to.deep.equal({ message: 'Updated' });
+    // });
+
+    it.skip('should be able to update a match', async function () {
+      
+      
+      sinon.stub(MatchModelSequelize, 'findByPk').resolves(matches[0] as any);
+      sinon.stub(MatchModelSequelize.prototype, 'save').resolves();
+
       const { status, body } = await chai
         .request(app)
         .patch('/matches/1')
         .set('Authorization', `Bearer ${token}`)
         .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
-  
+
       expect(status).to.equal(200);
       expect(body).to.deep.equal({ message: 'Updated' });
     });
