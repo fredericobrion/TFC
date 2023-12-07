@@ -5,8 +5,13 @@ import Leaderboard from '../classes/Leaderboard';
 export default class LeaderBoardService {
   private leaderboard: Leaderboard = new Leaderboard();
 
-  async getLeaderBoard(home: boolean): Promise<ServiceResponse<ILeaderboard[]>> {
-    const leaderboard = await this.leaderboard.getLeaderboard(home);
+  async getLeaderBoardByHomeAndAway(home: boolean): Promise<ServiceResponse<ILeaderboard[]>> {
+    const leaderboard = await this.leaderboard.getLeaderBoardByHomeAndAway(home);
+    return { status: 'SUCCESSFUL', data: leaderboard };
+  }
+
+  async getFullLeaderboard(): Promise<ServiceResponse<ILeaderboard[]>> {
+    const leaderboard = await this.leaderboard.getLeaderBoard();
     return { status: 'SUCCESSFUL', data: leaderboard };
   }
 }

@@ -8,13 +8,19 @@ export default class LeaderboardController {
   ) {}
 
   async getLeaderboardHome(_req: Request, res: Response) {
-    const { data, status } = await this.leaderboardService.getLeaderBoard(true);
+    const { data, status } = await this.leaderboardService.getLeaderBoardByHomeAndAway(true);
 
     return res.status(mapStatusHTTP(status)).json(data);
   }
 
   async getLeaderboardAway(_req: Request, res: Response) {
-    const { data, status } = await this.leaderboardService.getLeaderBoard(false);
+    const { data, status } = await this.leaderboardService.getLeaderBoardByHomeAndAway(false);
+
+    return res.status(mapStatusHTTP(status)).json(data);
+  }
+
+  async getFullLeaderboard(_req: Request, res: Response) {
+    const { data, status } = await this.leaderboardService.getFullLeaderboard();
 
     return res.status(mapStatusHTTP(status)).json(data);
   }

@@ -3,8 +3,9 @@ import MatchModelSequelize from '../database/models/MatchModelSequelize';
 import { ITeam } from '../Interfaces/teams/ITeam';
 import { IMatch } from '../Interfaces/matches/IMatch';
 import ILeaderboard from '../Interfaces/leaderboard/ILeaderboard';
-import MatchPerformances from './MatchPerformances';
+import MatchPerformancesByHomeAndAway from './MatchPerformancesByHomeAndAway';
 import orderLeaderboard from '../utils/orderLeaderBoard';
+import FullMatchPerformances from './FullMatchPerformances';
 
 export default class Leaderboard {
   private teams: ITeam[] = [];
@@ -25,11 +26,11 @@ export default class Leaderboard {
     return this.matches;
   }
 
-  async getLeaderboard(home: boolean): Promise<ILeaderboard[]> {
+  async getLeaderBoardByHomeAndAway(home: boolean): Promise<ILeaderboard[]> {
     const leaderboard = this.teams.map((team) => {
       const filteredMatches = this.matches.filter((match) => (home
         ? match.homeTeamId === team.id : match.awayTeamId === team.id) && !match.inProgress);
-      const matchPerformances = new MatchPerformances(filteredMatches);
+      const matchPerformances = new MatchPerformancesByHomeAndAway(filteredMatches);
       return {
         name: team.teamName,
         totalPoints: matchPerformances.calculatePoints(home),
@@ -41,6 +42,27 @@ export default class Leaderboard {
         goalsOwn: matchPerformances.calculateGoalsOwn(home),
         goalsBalance: matchPerformances.calculateGoalsBalance(home),
         efficiency: matchPerformances.calculateEfficiency(home),
+      };
+    });
+    return orderLeaderboard(leaderboard);
+  }
+
+  async getLeaderBoard(): Promise<ILeaderboard[]> {
+    const leaderboard = this.teams.map((team) => {
+      const filteredMatches = this.matches.filter((match) => (match.homeTeamId === team.id
+        || match.awayTeamId === team.id) && !match.inProgress);
+      const matchPerformances = new FullMatchPerformances(filteredMatches);
+      return {
+        name: team.teamName,
+        totalPoints: matchPerformances.calculatePoints(team.id),
+        totalGames: filteredMatches.length,
+        totalVictories: matchPerformances.calculateVictories(team.id),
+        totalDraws: matchPerformances.calculateDraws(team.id),
+        totalLosses: matchPerformances.calculateLosses(team.id),
+        goalsFavor: matchPerformances.calculateGoalsFavor(team.id),
+        goalsOwn: matchPerformances.calculateGoalsOwn(team.id),
+        goalsBalance: matchPerformances.calculateGoalsBalance(team.id),
+        efficiency: matchPerformances.calculateEfficiency(team.id),
       };
     });
     return orderLeaderboard(leaderboard);

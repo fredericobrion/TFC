@@ -1,6 +1,6 @@
 import { IMatch } from '../Interfaces/matches/IMatch';
 
-export default class MatchPerformances {
+export default class MatchPerformancesByHomeAndAway {
   private matches: IMatch[];
 
   constructor(matches: IMatch[]) {
@@ -68,7 +68,7 @@ export default class MatchPerformances {
     const points = this.calculatePoints(home);
     const games = this.matches.length;
 
-    const efficiency = Number(((points * 100) / (games * 3)).toFixed(2));
+    const efficiency = ((points * 100) / (games * 3)).toFixed(2);
 
     return efficiency.toString();
   }
