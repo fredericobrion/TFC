@@ -989,4 +989,63 @@ const allMatches = [
   },
 ];
 
-export { teams, homeResult, awayResult, allMatches, allResults };
+const homeMatches = [
+  {
+    id: 1,
+    homeTeamId: 1,
+    homeTeamGoals: 1,
+    awayTeamId: 8,
+    awayTeamGoals: 1,
+  },
+  {
+    id: 2,
+    homeTeamId: 1,
+    homeTeamGoals: 1,
+    awayTeamId: 3,
+    awayTeamGoals: 0,
+  },
+  {
+    id: 3,
+    homeTeamId: 1,
+    homeTeamGoals: 1,
+    awayTeamId: 5,
+    awayTeamGoals: 0,
+  },
+];
+
+const awayMatches = [
+  {
+    id: 4,
+    homeTeamId: 2,
+    homeTeamGoals: 1,
+    awayTeamId: 1,
+    awayTeamGoals: 0,
+  },
+  {
+    id: 5,
+    homeTeamId: 3,
+    homeTeamGoals: 1,
+    awayTeamId: 1,
+    awayTeamGoals: 1,
+  },
+  {
+    id: 6,
+    homeTeamId: 4,
+    homeTeamGoals: 0,
+    awayTeamId: 1,
+    awayTeamGoals: 1,
+  },
+];
+
+const matches = [...homeMatches, ...awayMatches];
+
+export {
+  teams,
+  homeResult,
+  awayResult,
+  allMatches,
+  allResults,
+  matches,
+  homeMatches,
+  awayMatches,
+};
