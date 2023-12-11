@@ -5,7 +5,7 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import TeamModelSequelize from '../database/models/TeamModelSequelize';
-import { allMatches, awayResult, homeResult, teams } from './mocks/Leaderboard.mock';
+import { allMatches, allResults, awayResult, homeResult, teams } from './mocks/Leaderboard.mock';
 import MatchModelSequelize from '../database/models/MatchModelSequelize';
 import Leaderboard from '../classes/Leaderboard';
 
@@ -26,6 +26,40 @@ describe('Leaderboard test', () => {
 
       expect(status).to.equal(200);
       expect(body).to.deep.equal(homeResult);
+    })
+
+    afterEach(sinon.restore);
+  });
+
+  describe('GET /leaderboard/away', () => {
+    it('should return the ordered leaderboard', async () => {
+      sinon.stub(TeamModelSequelize, 'findAll').resolves(teams as any);
+      sinon.stub(MatchModelSequelize, 'findAll').resolves(allMatches as any);
+      sinon.stub(Leaderboard.prototype, 'getLeaderBoardByHomeAndAway').resolves(awayResult as any);
+
+      const { status, body } = await chai
+        .request(app)
+        .get('/leaderboard/away');
+
+      expect(status).to.equal(200);
+      expect(body).to.deep.equal(awayResult);
+    })
+
+    afterEach(sinon.restore);
+  });
+
+  describe('GET /leaderboard', () => {
+    it('should return the ordered leaderboard', async () => {
+      sinon.stub(TeamModelSequelize, 'findAll').resolves(teams as any);
+      sinon.stub(MatchModelSequelize, 'findAll').resolves(allMatches as any);
+      sinon.stub(Leaderboard.prototype, 'getLeaderBoard').resolves(allResults as any);
+
+      const { status, body } = await chai
+        .request(app)
+        .get('/leaderboard');
+
+      expect(status).to.equal(200);
+      expect(body).to.deep.equal(allResults);
     })
 
     afterEach(sinon.restore);
