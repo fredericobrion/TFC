@@ -23,7 +23,7 @@ O TFC é um site informativo sobre partidas e classificações de futebol. O fro
 - Execute o comando ```npm run compose:up``` para iniciar a aplicação em sua máquina.
 
 ## Funcionalidades
-1) Endpoint ```/teams``` para retornar todos os times.
+1) Endpoint ```/teams``` para retornar os times.
    -  ```GET /teams``` retorna todos os times.
    -  ```GET /teams/:id``` retorna um time pelo id.
   
@@ -32,7 +32,7 @@ O TFC é um site informativo sobre partidas e classificações de futebol. O fro
    - ```POST /login``` realiza login e retorna um token.
    - ```GET /login/role``` recebe um ```header``` com parâmetro ```authorization``` com o token no formato ``` `Bearer ${token}` ``` e retorna os dados no front.
    
-3) Endpoint ```/matches``` para retornar as partidas
+3) Endpoint ```/matches``` para as partidas
   - ```GET /matches``` retorna todas as partidas.
   - ```GET /matches?inProgress=true e GET /matches?inProgress=false``` retornam as partidas em andamento ou finalizadas.
   - ```PATCH /matches/:id/finish``` finaliza uma partida. É necessário o envio de um token válido.
