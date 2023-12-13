@@ -13,6 +13,7 @@ O TFC é um site informativo sobre partidas e classificações de futebol. O fro
 - <a href="https://www.chaijs.com/" target="_blank">Chai</a>
 - <a href="https://sinonjs.org/" target="_blank">Sinon</a>
 - <a href="https://www.npmjs.com/package/bcryptjs" target="_blank">bcrypt.js</a>
+- <a href="https://nodemon.io/" target="_blank">Nodemon</a>
 
 ## Como utilizar
 - Clone o repositório e entre no diretório
